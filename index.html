@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+    </head>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&display=swap');
+	#watch-service-online .watch-online,
+	#watch-service-online .starting-soon,
+	#watch-service-online .is-starting,
+	#watch-service-online .has-started,
+	#watch-service-online .between-services {
+		display: none;
+	}
+	#watch-service-online[data-state="watch-online"] .watch-online,
+	#watch-service-online[data-state="starting-soon"] .starting-soon,
+	#watch-service-online[data-state="is-starting"] .is-starting,
+	#watch-service-online[data-state="has-started"] .has-started,
+	#watch-service-online[data-state="between-services"] .between-services {
+		display: inline;
+	}
+	#watch-service-online {
+		display: -webkit-flex;
+		display: -moz-flex;
+		display: -ms-flex;
+		display: -o-flex;
+		display: flex;
+		-ms-align-items: center;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		padding: 16px 0;
+		width: 100%;
+		min-height: 82px;
+		background-color: #00b6a5;
+		font-family: proxima-nova, arial, sans-serif;
+		font-weight: 600;
+		font-style: normal;
+		font-size: 15px;
+		letter-spacing: 0.4px;
+		text-align: center;
+		/*text-transform: uppercase;*/
+		text-decoration: none;
+		line-height: 1em;
+		color: #fff;
+		text-shadow: 0 2px 1px rgba(0, 80, 73, 0.35);
+		/*box-shadow: inset 0 -15px 20px -20px #008377;*/
+		box-shadow: 0 0 40px 0px rgba(0, 0, 0, 0.25);
+		user-select: none;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		top: 0;
+		z-index: 99999;
+		cursor: pointer;
+		will-change: transform;
+	}
+	#watch-service-online:not([data-state]) {
+		display: none !important;
+	}
+	#watch-service-online[data-state="is-starting"],
+	#watch-service-online[data-state="has-started"] {
+		position: sticky;
+	}
+	#watch-service-online a {
+		outline: none !important;
+		outline: 0 !important;
+	}
+	#watch-service-online .emphasis {
+		display: inline-block;
+		position: relative;
+		font-weight: bold;
+	}
+	#watch-service-online > [id^="service-"] {
+		display: none;
+		-ms-align-items: center;
+		align-items: center;
+		justify-content: space-between;
+		width: calc(100% - 48px);
+		max-width: 525px;
+	}
+	#watch-service-online[data-state="watch-online"] #service-countdown,
+	#watch-service-online[data-state="starting-soon"] #service-countdown,
+	#watch-service-online[data-state="is-starting"] #service-watch,
+	#watch-service-online[data-state="has-started"] #service-watch,
+	#watch-service-online[data-state="between-services"] #service-countdown {
+		display: -webkit-flex;
+		display: -moz-flex;
+		display: -ms-flex;
+		display: -o-flex;
+		display: flex;
+	}
+	#watch-service-online > [id^="service-"] > :nth-child(1),
+	#watch-service-online > [id^="service-"] > :nth-child(2) {
+		display: -webkit-flex;
+		display: -moz-flex;
+		display: -ms-flex;
+		display: -o-flex;
+		display: flex;
+		-ms-align-items: center;
+		align-items: center;
+		justify-content: center;
+	}
+	#watch-service-online > [id^="service-"] > :nth-child(1) {
+		flex-direction: column;
+		align-items: flex-start;
+		text-align: left;
+		font-size: 22px;
+	}
+	#watch-service-online .service-countdown-label-subtitle,
+	#watch-service-online .service-watch-label-subtitle {
+		display: block;
+		margin-top: 8px;
+		font-size: 19px;
+		font-weight: 400;
+		color: #006a60;
+		text-shadow: none;
+	}
+	#watch-service-online .service-countdown-label-subtitle a,
+	#watch-service-online .service-watch-label-subtitle a {
+		color: inherit;
+		text-decoration: none;
+	}
+	#service-countdown-timer,
+	#service-watch-cta {
+		color: #008477;
+		transition: all 0.2s ease-in-out;
+	}
+	/*.service-countdown-timer-unit {
+		display: inline-block;
+		padding: 10px 0;
+		width: 38px;
+		background-color: #fff;
+		border-radius: 10px;
+		font-family: "Oswald", arial, sans-serif;
+		font-weight: 400;
+		font-size: 20px;
+		letter-spacing: 0.4px;
+		color: #333;
+		text-shadow: none;
+	}*/
+	.service-countdown-timer-unit {
+		display: inline-flex;
+		flex-direction: column;
+		margin: 0 2px;
+		align-items: center;
+		justify-content: center;
+		height: 48px;
+		width: 48px;
+		background-color: #fff;
+		border-radius: 500px;
+		font-family: "Oswald", arial, sans-serif;
+		font-weight: 400;
+		font-size: 20px;
+		letter-spacing: 0.4px;
+		color: #008477;
+		text-shadow: none;
+		box-shadow: 0 10px 15px -10px #006a60, inset 0 -10px 15px -10px rgba(0, 106, 96, 0.35);
+	}
+	.service-countdown-timer-unit::after {
+		content: attr(data-label);
+		display: inline-block;
+		position: relative;
+		margin-top: 1px;
+		text-transform: uppercase;
+		font-size: 60%;
+		font-weight: 500;
+		letter-spacing: 0;
+	}
+	.service-countdown-timer-unit#service-countdown-timer-days[data-count="1"]::after {
+		content: "Day";
+	}
+	.service-countdown-timer-unit#service-countdown-timer-hours[data-count="1"]::after {
+		content: "Hour";
+	}
+	@media (min-width: 600px) {
+		#watch-service-online .mobile-text {
+			display: none !important;
+		}
+	}
+	@media (max-width: 599px) {
+		#watch-service-online {
+			min-height: 130px;
+		}
+		#watch-service-online > [id^="service-"] {
+			width: 100%;
+			padding-left: 5px;
+			padding-right: 5px;
+		}
+		#watch-service-online .desktop-text {
+			display: none !important;
+		}
+		#watch-service-online > [id^="service-"] {
+			flex-direction: column;
+		}
+		#watch-service-online > [id^="service-"] > :nth-child(1) {
+			align-items: center;
+			margin-bottom: 8px;
+			text-align: center;
+		}
+		#watch-service-online .service-countdown-label-subtitle,
+		#watch-service-online .service-watch-label-subtitle {
+			font-size: 16px;
+			letter-spacing: 0;
+		}
+	}
+	/* Pill Design - START */
+	#service-countdown-timer,
+	#service-watch-cta {
+		padding: 0 10px;
+		background-color: #fff;
+		border-radius: 500px;
+		box-shadow: 0 10px 15px -10px #006a60, inset 0 -10px 15px -10px rgba(0, 106, 96, 0.35);
+	}
+	#service-watch-cta {
+		margin: 2px 0;
+		padding: 14px 24px;
+		font-size: 18px;
+		font-weight: 400;
+		text-shadow: none;
+	}
+	@media (min-width: 600px) {
+		.emphasis::after {
+			content: " ";
+			display: block;
+			position: absolute;
+			bottom: -3px;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 0;
+			height: 2px;
+			background-color: #006a60;
+			transition: width 0.15s ease-in-out;
+		}
+		.emphasis:hover::after {
+			width: 98%;
+		}
+		#service-countdown-timer:hover,
+		#service-watch-cta:hover {
+			-webkit-transform: scale(1.095);
+			-ms-transform: scale(1.095);
+			-o-transform: scale(1.095);
+			transform: scale(1.095);
+			box-shadow: 0 15px 20px -8px #006a60, inset 0 -10px 15px -10px rgba(0, 106, 96, 0.35);
+		}
+		#service-countdown-timer:active,
+		#service-watch-cta:active {
+			-webkit-transform: scale(0.9);
+			-ms-transform: scale(0.9);
+			-o-transform: scale(0.9);
+			transform: scale(0.9);
+		}
+		#service-watch-cta:active {
+			box-shadow: 0 10px 15px -10px #006a60, inset 0 -10px 15px -10px rgba(0, 106, 96, 0.35);
+		}
+		#watch-service-online .service-countdown-label-subtitle a,
+		#watch-service-online .service-watch-label-subtitle a {
+			color: inherit;
+			text-decoration: none;
+		}
+	}
+	#service-countdown-timer .service-countdown-timer-unit {
+		width: 38px;
+		border-radius: 0;
+		margin-left: 0;
+		margin-right: 0;
+		background-color: transparent;
+		border-radius: 0;
+		box-shadow: none;
+		color: #008477;
+	}
+	/* Pill Design - END */
+</style>
+    <body>
+
+        <div class="eric-clock">
+            <span style="margin:10px;" class="days"></span>
+            <span style="margin:10px;" class="hours"></span>
+            <span style="margin:10px;" class="minutes"></span>
+            <span style="margin:10px;" class="seconds"></span>
+        </div>
+        <script type="text/javascript" src="./clock.js"></script>
+    </body>
+</html>
